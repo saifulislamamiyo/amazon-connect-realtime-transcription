@@ -307,7 +307,8 @@ public class KVSTranscribeStreamingLambda implements RequestHandler<Transcriptio
         KVSContactTagProcessor tagProcessor = new KVSContactTagProcessor(contactId);
         FragmentMetadataVisitor fragmentVisitor = FragmentMetadataVisitor.create(Optional.of(tagProcessor));
 
-        String fileName = String.format("%s_%s_%s.raw", contactId, DATE_FORMAT.format(new Date()), trackName);
+        // String fileName = String.format("%s_%s_%s.raw", contactId, DATE_FORMAT.format(new Date()), trackName);
+        String fileName = String.format("%s_%s.raw", DATE_FORMAT.format(new Date()), trackName);
         Path saveAudioFilePath = Paths.get("/tmp", fileName);
         FileOutputStream fileOutputStream = new FileOutputStream(saveAudioFilePath.toString());
 
