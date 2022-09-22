@@ -2,7 +2,7 @@
 dist/.DS_Store
 .gradle/*
 build/
-
+bin/
 # misc
 .DS_Store
 .env.local
