@@ -36,10 +36,11 @@ dependencies {
 tasks.register('packageDistribution', Zip) {
     from compileJava
     from processResources
+    into('lib') {
+        from configurations.compileClasspath
+    }
     archiveFileName = "kvsTranscribe.zip"
     destinationDirectory = layout.buildDirectory.dir('dist')
-
-    from configurations.compileClasspath
 }
 
 build.dependsOn packageDistribution
