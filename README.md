@@ -65,8 +65,10 @@ Getting started with this project is easy. The most basic use case of capturing 
 - Create a new prompt from the downloaded file `60s_silence-1663681531.wav`.
   ![](images/create_prompt.png)
 - Click save and publish the Contact Flow
-- In your Amazon Connect instance, claim a Phone Number and assign the Contact Flow you created to it and call the number. Depending on the settings in the KvsTranscriber Lambda Function, the audio will be saved in S3 bucket (`s3BucketName`).
+- In your Amazon Connect instance, claim a Phone Number and assign the Contact Flow you created to it and call the number.(`s3BucketName`).
   ![](images/connect-configure-phone-number.png)
+- Depending on the settings in the KvsTranscriber Lambda Function, the audio will be saved in S3 bucket
+  ![](images/recording_s3.png)
 
 ### Lambda Environment Variables
 
