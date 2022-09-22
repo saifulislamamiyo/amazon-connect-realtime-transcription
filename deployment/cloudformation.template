@@ -231,7 +231,7 @@ Resources:
           SEND_ANONYMOUS_DATA: !FindInMap [ "Send", "AnonymousUsage", "Data"]
       Code:
         S3Bucket: !Ref existingS3BucketName
-        S3Key: !Join ["", [!Ref existingS3Path, 'amazon-connect-realtime-transcription.zip']]
+        S3Key: !Join ["", [!Ref existingS3Path, 'kvsTranscribe.zip']]
 
   kvsConsumerTrigger:
     Type: "AWS::Lambda::Function"

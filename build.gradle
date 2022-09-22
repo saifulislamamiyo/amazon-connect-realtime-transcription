@@ -33,13 +33,13 @@ dependencies {
     runtimeOnly 'com.amazonaws:aws-lambda-java-log4j2:1.5.1'
 }
 
-task buildZip(type: Zip) {
+tasks.register('packageDistribution', Zip) {
     from compileJava
     from processResources
+    archiveFileName = "kvsTranscribe.zip"
+    destinationDirectory = layout.buildDirectory.dir('dist')
 
-    into('lib') {
-        from configurations.compileClasspath
-    }
+    from configurations.compileClasspath
 }
 
-build.dependsOn buildZip
+build.dependsOn packageDistribution
