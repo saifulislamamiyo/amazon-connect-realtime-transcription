@@ -84,6 +84,7 @@ public final class KVSUtils {
                                                      FragmentMetadataVisitor fragmentVisitor,
                                                      KVSContactTagProcessor tagProcessor,
                                                      String contactId, String track) throws MkvElementVisitException {
+        
         while (streamingMkvReader.mightHaveNext()) {
             Optional<MkvElement> mkvElementOptional = streamingMkvReader.nextIfAvailable();
             if (mkvElementOptional.isPresent()) {

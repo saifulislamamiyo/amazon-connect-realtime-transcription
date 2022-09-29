@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.Path;
 
 /**
  * Utility class to download/upload audio files from/to S3
@@ -42,7 +43,7 @@ import java.nio.file.Paths;
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 public final class AudioUtils {
-
+    private static final String RECORDINGS_FILE_NAME = System.getenv("RECORDING_FILE_NAME");
     private static final Logger logger = LoggerFactory.getLogger(AudioUtils.class);
 
     /**
@@ -76,7 +77,11 @@ public final class AudioUtils {
      * Converts the given raw audio data into a wav file. Returns the wav file back.
      */
     private static File convertToWav(String audioFilePath) throws IOException, UnsupportedAudioFileException {
-        File outputFile = new File(audioFilePath.replace(".raw", ".wav"));
+        String outputFileName = RECORDINGS_FILE_NAME.toString()+".wav";
+        Path outputFilePath = Paths.get("/tmp", outputFileName);
+        logger.info("Output file name: "+outputFilePath.toString());
+        // File outputFile = new File(audioFilePath.replace(".raw", ".wav"));
+        File outputFile = new File(outputFilePath.toString());
         AudioInputStream source = new AudioInputStream(Files.newInputStream(Paths.get(audioFilePath)),
                 new AudioFormat(8000, 16, 1, true, false), -1); // 8KHz, 16 bit, 1 channel, signed, little-endian
         AudioSystem.write(source, AudioFileFormat.Type.WAVE, outputFile);

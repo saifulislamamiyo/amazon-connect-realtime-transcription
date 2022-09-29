@@ -34,6 +34,7 @@ Metadata:
           - s3BucketName
           - audioFilePrefix
           - rawAudioUploadPrefix
+          - audioFileName
     ParameterLabels:
       existingS3BucketName:
         default: Existing S3 Bucket
@@ -45,6 +46,8 @@ Metadata:
         default: Audio File Prefix
       rawAudioUploadPrefix:
         default: Test Mono Audio Prefix
+      audioFileName:
+        default: The case-sensitive name of the Audio file without extentsion.
 Parameters:
   existingS3BucketName:
     Type: String
@@ -71,7 +74,11 @@ Parameters:
     Description:  >
       The Amazon S3 prefix where raw/wav (audio/L16; mono; 8 kHz) audio recordings may be uploaded in the event you would like
       process an audio file vs making a phone call and streaming from KVS. Mainly for testing, or for realtime transcription of audio files. This will only work with single channel files (mono). 
-
+  audioFileName:
+    Type: String
+    Default:  CUSTOMER_AUDIO_FILE
+    Description:  >
+      The audio recording file name. Don't put any extension as .wav will be added by lambda
 Outputs:
   createS3BucketOP:
     Description: Bucket contains individual channel call recordings
@@ -221,6 +228,7 @@ Resources:
           APP_REGION: !Ref "AWS::Region"
           TRANSCRIBE_REGION: !Ref "AWS::Region"
           RECORDINGS_BUCKET_NAME: !Ref s3BucketName
+          RECORDING_FILE_NAME: !Ref audioFileName
           RECORDINGS_KEY_PREFIX: !Ref audioFilePrefix
           INPUT_KEY_PREFIX: !Ref rawAudioUploadPrefix
           RECORDINGS_PUBLIC_READ_ACL: "FALSE"

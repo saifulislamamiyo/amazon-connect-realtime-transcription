@@ -197,7 +197,7 @@ public class KVSTranscribeStreamingLambda implements RequestHandler<Transcriptio
             }
         } else {
             try {
-                logger.info("Saving audio bytes to location");
+                logger.info("Saving audio bytes to location: "+ kvsStreamTrackObjectFromCustomer.getSaveAudioFilePath().toString()+ " with trackname: "+kvsStreamTrackObjectFromCustomer.getTrackName().toString());
 
                 //Write audio bytes from the KVS stream to the temporary file
                 if (kvsStreamTrackObjectFromCustomer != null) {
@@ -206,6 +206,7 @@ public class KVSTranscribeStreamingLambda implements RequestHandler<Transcriptio
                 if (kvsStreamTrackObjectToCustomer != null) {
                     writeAudioBytesToKvsStream(kvsStreamTrackObjectToCustomer, contactId);
                 }
+                logger.info("Raw file size: "+new File(kvsStreamTrackObjectFromCustomer.getSaveAudioFilePath().toString()).length());
 
             } finally {
                 if (kvsStreamTrackObjectFromCustomer != null) {
@@ -274,6 +275,9 @@ public class KVSTranscribeStreamingLambda implements RequestHandler<Transcriptio
         kvsStreamTrackObject.getInputStream().close();
         kvsStreamTrackObject.getOutputStream().close();
 
+        logger.info("Inside closeFileAndUploadRawAudio, flag: "+(saveCallRecording.isPresent() ? saveCallRecording.get() : false));
+        logger.info("Inside closeFileAndUploadRawAudio, size: "+(new File(kvsStreamTrackObject.getSaveAudioFilePath().toString()).length()));
+
         //Upload the Raw Audio file to S3
         if ((saveCallRecording.isPresent() ? saveCallRecording.get() : false) && (new File(kvsStreamTrackObject.getSaveAudioFilePath().toString()).length() > 0)) {
             AudioUtils.uploadRawAudio(REGION, RECORDINGS_BUCKET_NAME, RECORDINGS_KEY_PREFIX, kvsStreamTrackObject.getSaveAudioFilePath().toString(), contactId, RECORDINGS_PUBLIC_READ_ACL,
@@ -308,7 +312,8 @@ public class KVSTranscribeStreamingLambda implements RequestHandler<Transcriptio
         FragmentMetadataVisitor fragmentVisitor = FragmentMetadataVisitor.create(Optional.of(tagProcessor));
 
         // String fileName = String.format("%s_%s_%s.raw", contactId, DATE_FORMAT.format(new Date()), trackName);
-        String fileName = String.format("%s_%s.raw", DATE_FORMAT.format(new Date()), trackName);
+        // String fileName = String.format("%s_%s.raw", DATE_FORMAT.format(new Date()), trackName);
+        String fileName = String.format("%s.raw", trackName);
         Path saveAudioFilePath = Paths.get("/tmp", fileName);
         FileOutputStream fileOutputStream = new FileOutputStream(saveAudioFilePath.toString());
 
