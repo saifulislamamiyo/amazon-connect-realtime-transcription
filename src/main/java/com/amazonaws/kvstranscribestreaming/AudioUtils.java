@@ -83,8 +83,11 @@ public final class AudioUtils {
         // File outputFile = new File(audioFilePath.replace(".raw", ".wav"));
         File outputFile = new File(outputFilePath.toString());
         AudioInputStream source = new AudioInputStream(Files.newInputStream(Paths.get(audioFilePath)),
-                new AudioFormat(8000, 16, 1, true, false), -1); // 8KHz, 16 bit, 1 channel, signed, little-endian
-        AudioSystem.write(source, AudioFileFormat.Type.WAVE, outputFile);
+                new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 8000, 16, 1 , 1,8000, false), -1); // 8KHz, 16 bit, 1 channel, signed, little-endian
+
+        AudioFormat targetFormat = new AudioFormat(AudioFormat.Encoding.ULAW,8000,8,1,1,8000,false);
+        AudioInputStream targetAudioInputStream = AudioSystem.getAudioInputStream(targetFormat, source);
+        AudioSystem.write(targetAudioInputStream, AudioFileFormat.Type.WAVE, outputFile);
 
         source.close();
         return outputFile;
